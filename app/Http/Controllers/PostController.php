@@ -18,8 +18,7 @@ class PostController extends Controller
         $startDate = Carbon::createFromDate($request->input('start_date'))->getTimestampMs();
         $endDate   = Carbon::createFromDate($request->input('end_date'))->getTimestampMs();
 
-//        $posts = Post::whereBetween('published_at', [$startDate, $endDate])->orderByDesc('likes')->get();
-        $posts = Category::find(1)->posts;
+        $posts = Post::whereBetween('published_at', [$startDate, $endDate])->orderByDesc('likes')->get();
         return Response::json([
             'status' => 200,
             'data'   => $posts
