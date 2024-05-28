@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,8 +18,8 @@ class PostController extends Controller
         $startDate = Carbon::createFromDate($request->input('start_date'))->getTimestampMs();
         $endDate   = Carbon::createFromDate($request->input('end_date'))->getTimestampMs();
 
-        $posts = Post::whereBetween('published_at', [$startDate, $endDate])->orderByDesc('likes')->get();
-
+//        $posts = Post::whereBetween('published_at', [$startDate, $endDate])->orderByDesc('likes')->get();
+        $posts = Category::find(1)->posts;
         return Response::json([
             'status' => 200,
             'data'   => $posts
@@ -55,7 +56,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post->update([
+            'title' => $request->get('title'),
+        ]);
+
+        return Response::json($post)->setStatusCode(201);
     }
 
     /**
@@ -63,6 +68,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return Response::json($post)->setStatusCode(204);
     }
 }
